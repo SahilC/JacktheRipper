@@ -34,7 +34,7 @@ while !result["set"]["at_end"] do
    	end
 	end
 	puts "Done."
-	url = 'http://8tracks.com/sets/460486803/next.jsonp?mix_id='+resultr["mixes"][i]["id"].to_s()+'&api_key=b5de95d329b4cbfc3605a3c46072b8601b997c5b'
+	url = 'http://8tracks.com/sets/460486803/next.jsonp?mix_id='+resultr["mixes"][i]["id"].to_s()+'&api_key='
 	resp = Net::HTTP.get_response(URI.parse(url))
 	data = resp.body
 	result=JSON.parse(data)
