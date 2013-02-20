@@ -3,8 +3,13 @@ require 'json'
 puts "8tracks mix downloader v1.0"
 puts "Input the full URL to the 8tracks mix"
 mixurl=gets.chomp
-path=mixurl[18..-1]
-user=mixurl[19..-1][/([a-zA-Z0-9_]*)/]
+if(mixurl[0..4].eql? "https") then
+	path=mixurl[19..-1]
+	user=mixurl[20..-1][/([a-zA-Z0-9_-]*)/]
+else
+	path=mixurl[18..-1]
+	user=mixurl[19..-1][/([a-zA-Z0-9_-]*)/]
+end
 mix=path[user.length+2..-1]
 mixesurl='http://8tracks.com/users/'+user+'/mixes.jsonp?api_key=b5de95d329b4cbfc3605a3c46072b8601b997c5b&per_page=300'
 respr = Net::HTTP.get_response(URI.parse(mixesurl))
