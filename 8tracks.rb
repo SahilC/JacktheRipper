@@ -28,7 +28,9 @@ resp = Net::HTTP.get_response(URI.parse(url))
 data = resp.body
 result=JSON.parse(data)
 directory_name = Dir::pwd + "/" + mix
-Dir::mkdir(directory_name)
+if(!File.directory?(directory_name)) then
+	Dir::mkdir(directory_name)
+end
 Dir.chdir(directory_name)
 while !result["set"]["at_end"] do
 	puts result["set"]["track"]["name"]+"-"+result["set"]["track"]["performer"]
@@ -36,12 +38,14 @@ while !result["set"]["at_end"] do
 	index=start.length
 	start=start[7..-1]
 	file=result["set"]["track"]["url"][index..-1]
+	if(!File.exist?(result["set"]["track"]["name"]+"-"+result["set"]["track"]["performer"]+"."+result["set"]["track"]["url"][-3..-1])) then
 	Net::HTTP.start(start) do |http|
 	   respr = http.get(file)
-   	open(result["set"]["track"]["name"]+"-"+result["set"]["track"]["performer"]+"."+result["set"]["track"]["url"][-3..-1], "wb") do |file|
-        	file.write(respr.body)
-   	end
-	end
+   	   open(result["set"]["track"]["name"]+"-"+result["set"]["track"]["performer"]+"."+result["set"]["track"]["url"][-3..-1], "wb") do |file|
+       file.write(respr.body)
+   	   end
+	   end
+	end   
 	puts "Done."
 	url = 'http://8tracks.com/sets/460486803/next.jsonp?mix_id='+resultr["mixes"][i]["id"].to_s()+'&api_key=b5de95d329b4cbfc3605a3c46072b8601b997c5b'
 	resp = Net::HTTP.get_response(URI.parse(url))
