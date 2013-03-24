@@ -42,9 +42,13 @@ while !result["set"]["at_end"] do
 	if(!File.exist?(result["set"]["track"]["name"]+"-"+result["set"]["track"]["performer"]+"."+result["set"]["track"]["url"][-3..-1])) then
 		Net::HTTP.start(start) do |http|
 	   	respr = http.get(file)
+	   	begin
    	   	open(result["set"]["track"]["name"]+"-"+result["set"]["track"]["performer"]+"."+result["set"]["track"]["url"][-3..-1], "wb") do |file|
        		file.write(respr.body)
    	   		end
+   	   	rescue Exception => e
+   	   		puts e
+   	   	end
 	    end
 	end   
 	puts "Done."
